@@ -6,7 +6,8 @@
     "node": true,
   },
   "rules": {
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "require-jsdoc" : 0
   },
   "extends": ["eslint:recommended", "google"]
 }
