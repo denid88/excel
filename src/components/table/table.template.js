@@ -4,17 +4,23 @@ const CODES = {
 };
 
 function toCell() {
-  return `<div class="cell" contenditable></div>`;
+  return `<div class="cell" spellcheck="false" contenteditable="true"></div>`;
 }
 
 function createCol(col) {
-  return `<div class="column">${col}</div>`;
+  return `<div class="column">
+    ${col}
+    <div class="col-resize" data-resize="col"></div>
+  </div>`;
 }
 
 function createRow(i, content) {
   return `
     <div class="row">
-      <div class="row-info ${i ?? 'null'}">${i ?? ''}</div>
+      <div class="row-info ${i ?? 'null'}">
+        ${i ?? ''}
+        ${i !== null ? '<div class="row-resize" data-resize="row"></div>' : ''}
+      </div>
       <div class="row-data">${content}</div>
     </div>
   `;
@@ -32,8 +38,6 @@ export function createTable(rowsCount = 15) {
       .fill('')
       .map(toColumn)
       .map(createCol).join('');
-
-  console.log(null, cols);
 
   rows.push(createRow(null, cols));
 
