@@ -15,7 +15,8 @@ const jsLoaders = () => {
     {
       loader: 'babel-loader',
       options: {
-        presets: ['@babel/preset-env']
+        presets: ['@babel/preset-env'],
+        plugins: ['@babel/plugin-proposal-class-properties']
       }
     }
   ];
@@ -44,12 +45,30 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
+    before(app, server, compiler) {
+      const watchFiles = ['.html', '.hbs'];
+
+      compiler.plugin('done', () => {
+        const changedFiles = Object.keys(compiler.watchFileSystem.watcher.mtimes);
+
+        if (
+          this.hot &&
+          changedFiles.some((filePath) => watchFiles.includes(path.parse(filePath).ext))
+        ) {
+          server.sockWrite(server.sockets, 'content-changed');
+        }
+      });
+    },
     compress: true,
     hot: isDev,
     port: 3000,
   },
   module: {
     rules: [
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
       {
         test: /\.s[ac]ss$/i,
         use: [
@@ -75,7 +94,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: './index.html',
       minify: {
         removeComments: isProd,
         collapseWhitespace: isProd,
