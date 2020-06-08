@@ -17,7 +17,9 @@ export class Table extends ExcelComponent {
   }
 
   onMousedown(e) {
-    console.log('mousedown', e.target.dataset.resize);
+    if (e.target.dataset.resize) {
+      console.log('Resizing start:', e.target.dataset.resize);
+    }
   }
 /*
   onClick(e) {
