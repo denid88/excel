@@ -10,7 +10,7 @@ function toCell() {
 function createCol(col) {
   return `<div class="column">
     ${col}
-    <div class="col-resize" data-resize="col"></div>
+    <div class="col-resize" data-value="${col}" data-resize="col"></div>
   </div>`;
 }
 

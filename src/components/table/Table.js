@@ -1,5 +1,6 @@
 import {createTable} from '@/components/table/table.template';
 import {ExcelComponent} from '@/core/ExcelComponent';
+import {getCoords} from '@/components/table/table.actions';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
@@ -8,7 +9,7 @@ export class Table extends ExcelComponent {
     super($root, {
       name: 'Table',
       // listeners: ['click', 'mousedown', 'mousemove', 'mouseup']
-      listeners: ['mousedown']
+      listeners: ['mousedown', 'mousemove', 'mouseup']
     });
   }
 
@@ -17,9 +18,35 @@ export class Table extends ExcelComponent {
   }
 
   onMousedown(e) {
-    if (e.target.dataset.resize) {
-      console.log('Resizing start:', e.target.dataset.resize);
+    const element = getCoords(e.target.parentNode);
+    const move = document.querySelector('.move');
+
+    if (move === null) {
+      const excelTableEl = document.querySelector('.excel__table');
+      const div = document.createElement('div');
+      div.classList.add('move');
+      excelTableEl.appendChild(div);
+      div.style.left = element.leftMax - 2 + 'px';
     }
+
+    move.style.left = element.leftMax - 2 + 'px';
+  }
+
+  onMousemove(e) {
+    console.log('mousemove');
+    console.log(e.clientX);
+    const move = document.querySelector('.move');
+    if (move != null) {
+      move.style.left = e.clientX - 2 + 'px';
+    }
+  }
+
+  onMouseup(e) {
+    console.log('mouseup');
+    const excelTableEl = document.querySelector('.excel__table');
+    const move = document.querySelector('.move');
+    move.classList.remove('move');
+    excelTableEl.removeChild(move);
   }
 /*
   onClick(e) {
@@ -28,14 +55,6 @@ export class Table extends ExcelComponent {
 
   onMousedown() {
     console.log('mousedown');
-  }
-
-  onMousemove() {
-    console.log('mousemove');
-  }
-
-  onMouseup() {
-    console.log('mouseup');
   }
   */
 }

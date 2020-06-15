@@ -58,6 +58,7 @@
       @include resizer;
     }
   }
+
   .cell {
     min-width: 40px;
     padding: 5px;
@@ -78,6 +79,16 @@
       outline: 2px solid $primary-color;
       z-index: 2;
     }
+  }
+
+  .move{
+    width: 2px;
+    min-height: 100vh;
+    position: absolute;
+    background-color: $primary-color;
+    left: -1px;
+    top: 0;
+    cursor: resize;
   }
 
 }
